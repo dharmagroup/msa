@@ -235,21 +235,21 @@ class Andons extends Controller
             if (!$model->count()) {
                 $andonTimer = AndonTimer::create([
                     'andon_log_id' => $andon_log_id,
-                    'start' => Carbon::now('Asia/Jakarta'),
+                    'start' => Carbon::now('Asia/Jakarta')->subMinutes(2),
                 ]);
 
             } else {
                 $model->delete();
                 $andonTimer = AndonTimer::create([
                     'andon_log_id' => $andon_log_id,
-                    'start' => Carbon::now('Asia/Jakarta'),
+                    'start' => Carbon::now('Asia/Jakarta')->subMinutes(2),
                 ]);
 
             }
         } else {
             $model = AndonTimer::where(['andon_log_id' => $andon_log_id]);
             if ($model->count() > 0) {
-                $andonTimer = $model->update(['end' => Carbon::now('Asia/Jakarta')]);
+                $andonTimer = $model->update(['end' => Carbon::now('Asia/Jakarta')->subMinutes(2)]);
 
             }
         }
