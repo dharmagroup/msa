@@ -281,15 +281,8 @@ class Andons extends Controller
             if ($now->diffInMinutes($createdAt) >= 2) {
                 $model = AndonTimer::where(['andon_log_id' => $item->id]);
 
-                if (!$model->exists()) {
+                if ($model->count() < 1) {
                     // Membuat timer baru
-                    $andonTimer = AndonTimer::create([
-                        'andon_log_id' => $item->id,
-                        'start' => $now,
-                    ]);
-                } else {
-                    // Menghapus timer yang ada dan membuat yang baru
-                    $model->delete();
                     $andonTimer = AndonTimer::create([
                         'andon_log_id' => $item->id,
                         'start' => $now,
@@ -309,12 +302,6 @@ class Andons extends Controller
                 }
             }
         }
-        $event = new Event();
-        $event->sending('andonstartrepair',[
-            'id' => 1,
-            's' => 'test',
-            'e' => 'test',
-        ], );
         return "ok"; // Jika tidak ada eksekusi
     }
 
