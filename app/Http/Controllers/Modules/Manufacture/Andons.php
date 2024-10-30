@@ -273,23 +273,29 @@ class Andons extends Controller
         $andonLog = AndonLog::where(['status' => 'active'])->get();
 
         foreach ($andonLog as $item) {
-            // Mendapatkan waktu sekarang dan waktu created_at
+            // Debugging
+            \Log::info("Processing item ID: " . $item->id);
+            
             $now = Carbon::now('Asia/Jakarta');
             $createdAt = Carbon::parse($item->created_at, 'Asia/Jakarta');
-
-            // Mengecek apakah sudah lebih dari 2 menit sejak created_at
-            if ($now->diffInMinutes($createdAt) >= 2) {
+            
+            \Log::info("Current time: " . $now);
+            \Log::info("Created at: " . $createdAt);
+            
+            if ($now->diffInSeconds($createdAt) >= 120) {
                 $model = AndonTimer::where(['andon_log_id' => $item->id]);
-
+        
                 if ($model->count() < 1) {
-                    // Membuat timer baru
                     $andonTimer = AndonTimer::create([
                         'andon_log_id' => $item->id,
                         'start' => $now,
                     ]);
+        
+                    \Log::info("Timer created for item ID: " . $item->id);
+                } else {
+                    \Log::info("Timer already exists for item ID: " . $item->id);
                 }
-
-                // Mengambil timer terbaru
+        
                 $models = AndonTimer::where(['andon_log_id' => $item->id])->first();
                 if ($models) {
                     $event = new Event();
@@ -298,12 +304,12 @@ class Andons extends Controller
                         's' => $models->start ? Carbon::parse($models->start)->format('Y-m-d H:i:s') : null,
                         'e' => $models->end ? Carbon::parse($models->end)->format('Y-m-d H:i:s') : null,
                     ]);
-                
+        
                     return $models;
                 }
             }
         }
-        return "ok"; // Jika tidak ada eksekusi
+        
     }
 
 
