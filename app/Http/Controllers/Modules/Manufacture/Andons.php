@@ -278,7 +278,7 @@ class Andons extends Controller
             $createdAt = Carbon::parse($item->created_at, 'Asia/Jakarta');
 
             // Mengecek apakah sudah lebih dari 2 menit sejak created_at
-            // if ($now->diffInMinutes($createdAt) >= 2) {
+            if ($now->diffInMinutes($createdAt) >= 2) {
                 $model = AndonTimer::where(['andon_log_id' => $item->id]);
 
                 if ($model->count() < 1) {
@@ -301,7 +301,7 @@ class Andons extends Controller
                 
                     return $models;
                 }
-            // }
+            }
         }
         return "ok"; // Jika tidak ada eksekusi
     }
