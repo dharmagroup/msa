@@ -273,34 +273,36 @@ class Andons extends Controller
 
         foreach ($andonLog as $item) {
             // Debugging
-
-
             $now = Carbon::now('Asia/Jakarta');
             $createdAt = Carbon::parse($item->created_at, 'Asia/Jakarta');
 
 
             \Log::info("Time difference: " . $createdAt->diffInSeconds($now));
 
-            if ($createdAt->diffInSeconds($now) >= 120 && $createdAt->diffInSeconds($now) <= 122) {
+            if ($createdAt->diffInSeconds($now) >= 120) {
                 // Cek apakah timer sudah ada
-                $andonTimer = AndonTimer::create([
-                    'andon_log_id' => $item->id,
-                    'start' => $now,
-                ]);
+                $modelExists = AndonTimer::where(['andon_log_id' => $item->id])->exists();
 
-
-                $models = AndonTimer::where(['andon_log_id' => $item->id])->first();
-                if ($models) {
-                    $event = new Event();
-                    $event->sending('andonstartrepair', [
-                        'id' => $models->andon_log_id,
-                        's' => $models->start ? Carbon::parse($models->start)->format('Y-m-d H:i:s') : null,
-                        'e' => $models->end ? Carbon::parse($models->end)->format('Y-m-d H:i:s') : null,
+                if (!$modelExists) {
+                    $andonTimer = AndonTimer::create([
+                        'andon_log_id' => $item->id,
+                        'start' => $now,
                     ]);
 
-                    return $models->id; // Mengembalikan ID alih-alih objek
-                }
 
+
+                    $models = AndonTimer::where(['andon_log_id' => $item->id])->first();
+                    if ($models) {
+                        $event = new Event();
+                        $event->sending('andonstartrepair', [
+                            'id' => $models->andon_log_id,
+                            's' => $models->start ? Carbon::parse($models->start)->format('Y-m-d H:i:s') : null,
+                            'e' => $models->end ? Carbon::parse($models->end)->format('Y-m-d H:i:s') : null,
+                        ]);
+
+                        return $models->id; // Mengembalikan ID alih-alih objek
+                    }
+                }
             }
         }
     }
