@@ -270,31 +270,25 @@ class Andons extends Controller
     public function _create_making_repair_automatic()
     {
         $andonLog = AndonLog::where(['status' => 'active'])->get();
-    
+
         foreach ($andonLog as $item) {
             // Debugging
-           
-            
+
+
             $now = Carbon::now('Asia/Jakarta');
             $createdAt = Carbon::parse($item->created_at, 'Asia/Jakarta');
-            
-           
+
+
             \Log::info("Time difference: " . $createdAt->diffInSeconds($now));
-            
-            if ($createdAt->diffInSeconds($now) >= 120) {
+
+            if ($createdAt->diffInSeconds($now) >= 120 && $createdAt->diffInSeconds($now) <= 122) {
                 // Cek apakah timer sudah ada
-                $modelExists = AndonTimer::where(['andon_log_id' => $item->id])->exists();
-    
-                if (!$modelExists) {
-                    $andonTimer = AndonTimer::create([
-                        'andon_log_id' => $item->id,
-                        'start' => $now,
-                    ]);
-    
-                } else {
-                  
-                }
-    
+                $andonTimer = AndonTimer::create([
+                    'andon_log_id' => $item->id,
+                    'start' => $now,
+                ]);
+
+
                 $models = AndonTimer::where(['andon_log_id' => $item->id])->first();
                 if ($models) {
                     $event = new Event();
@@ -303,13 +297,14 @@ class Andons extends Controller
                         's' => $models->start ? Carbon::parse($models->start)->format('Y-m-d H:i:s') : null,
                         'e' => $models->end ? Carbon::parse($models->end)->format('Y-m-d H:i:s') : null,
                     ]);
-    
+
                     return $models->id; // Mengembalikan ID alih-alih objek
                 }
+
             }
         }
     }
-    
+
 
 
     public function _get_reports_(Request $request)
