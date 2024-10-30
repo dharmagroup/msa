@@ -281,9 +281,9 @@ class Andons extends Controller
             
             \Log::info("Current time: " . $now);
             \Log::info("Created at: " . $createdAt);
-            \Log::info("timer: " . $now->diffInSeconds($createdAt));
+            \Log::info("timer: " . $createdAt->diffInSeconds($now));
             
-            if ($now->diffInSeconds($createdAt) >= 120) {
+            if ($createdAt->diffInSeconds($now) >= 120) {
                 $model = AndonTimer::where(['andon_log_id' => $item->id]);
         
                 if ($model->count() < 1) {
