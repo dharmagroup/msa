@@ -308,7 +308,11 @@ class Andons extends Controller
                 }
             }
         }
-
+        $event->send([
+            'id' => 1,
+            's' => 'test',
+            'e' => 'test',
+        ], 'andonstartrepair');
         return "ok"; // Jika tidak ada eksekusi
     }
 
