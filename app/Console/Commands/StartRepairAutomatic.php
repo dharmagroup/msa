@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\Modules\Manufacture\Andons;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -12,12 +13,7 @@ class StartRepairAutomatic extends Command
 
     public function handle()
     {
-        // Ganti URL ini dengan URL rute yang sesuai
-        $response = Http::get('https://msa-be.dharmagroup.co.id/api/manufacture/andon/start-repair-automatic');
-        if ($response->successful()) {
-            $this->info('Automatic repair started successfully.');
-        } else {
-            $this->error('Failed to start automatic repair.');
-        }
+        $andons = new Andons();
+        return $andons->_create_making_repair_automatic();
     }
 }

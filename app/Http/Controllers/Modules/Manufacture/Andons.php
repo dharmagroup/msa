@@ -267,7 +267,7 @@ class Andons extends Controller
         return Response()->json(['message' => 'NOT OK'], 401, [], JSON_PRETTY_PRINT);
     }
 
-    public function _create_making_repair_automatic(Request $request)
+    public function _create_making_repair_automatic()
     {
        
         $andonLog = AndonLog::where(['status' => 'active'])->get();
