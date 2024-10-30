@@ -186,10 +186,11 @@ class Andons extends Controller
 
                 if ($issue) {
                     $audio = AndonLine::where(['andon_line_name' => $issue->andon_line, 'andon_type_id' => $issue->andon_type])->first();
-                    $team = $issue->andon_name === 'mesin' ? 'Maintenance' : $issue->andon_name;
+                    $andon_name = AndonType::where(['id' => $issue->andon_type])->first();
+                    $team = $andon_name->andon_name === 'mesin' ? 'Maintenance' : $andon_name->andon_name;
 
                     $event->send([
-                        'm' => $issue->andon_name,
+                        'm' => $andon_name->andon_name,
                         'l' => $issue->andon_line,
                         's' => $issue->andon_station,
                         't' => $team,
