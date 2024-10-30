@@ -304,12 +304,12 @@ class Andons extends Controller
                         's' => $model->start ? $model->start->format('Y-m-d H:i:s') : null,
                         'e' => $model->end ? $model->end->format('Y-m-d H:i:s') : null,
                     ], 'andonstartrepair');
-                    return true;
+                    return $model;
                 }
             }
         }
 
-        return false; // Jika tidak ada eksekusi
+        return "ok"; // Jika tidak ada eksekusi
     }
 
 

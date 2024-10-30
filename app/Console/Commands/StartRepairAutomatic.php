@@ -13,7 +13,7 @@ class StartRepairAutomatic extends Command
     public function handle()
     {
         // Ganti URL ini dengan URL rute yang sesuai
-        $response = Http::get('https://msa-be.dharmagroup.co.id/api/manufacture/start-repair-automatic');
+        $response = Http::get('https://msa-be.dharmagroup.co.id/api/manufacture/andon/start-repair-automatic');
         if ($response->successful()) {
             $this->info('Automatic repair started successfully.');
         } else {
