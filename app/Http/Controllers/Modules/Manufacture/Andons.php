@@ -278,7 +278,7 @@ class Andons extends Controller
             $createdAt = Carbon::parse($item->created_at, 'Asia/Jakarta');
 
             // Mengecek apakah sudah lebih dari 2 menit sejak created_at
-            if ($now->diffInMinutes($createdAt) >= 2) {
+            // if ($now->diffInMinutes($createdAt) >= 2) {
                 $model = AndonTimer::where(['andon_log_id' => $item->id]);
 
                 if ($model->count() < 1) {
@@ -290,17 +290,17 @@ class Andons extends Controller
                 }
 
                 // Mengambil timer terbaru
-                $model = AndonTimer::where(['andon_log_id' => $item->id])->first();
-                if ($model) {
+                $models = AndonTimer::where(['andon_log_id' => $item->id])->first();
+                if ($models) {
                     $event = new Event();
                     $event->sending('andonstartrepair',[
-                        'id' => $model->andon_log_id,
-                        's' => $model->start ? $model->start->format('Y-m-d H:i:s') : null,
-                        'e' => $model->end ? $model->end->format('Y-m-d H:i:s') : null,
+                        'id' => $models->andon_log_id,
+                        's' => $models->start ? $model->start->format('Y-m-d H:i:s') : null,
+                        'e' => $models->end ? $model->end->format('Y-m-d H:i:s') : null,
                     ], );
-                    return $model;
+                    return $models;
                 }
-            }
+            // }
         }
         return "ok"; // Jika tidak ada eksekusi
     }
