@@ -273,13 +273,12 @@ class Andons extends Controller
     
         foreach ($andonLog as $item) {
             // Debugging
-            \Log::info("Processing item ID: " . $item->id);
+           
             
             $now = Carbon::now('Asia/Jakarta');
             $createdAt = Carbon::parse($item->created_at, 'Asia/Jakarta');
             
-            \Log::info("Current time: " . $now);
-            \Log::info("Created at: " . $createdAt);
+           
             \Log::info("Time difference: " . $createdAt->diffInSeconds($now));
             
             if ($createdAt->diffInSeconds($now) >= 120) {
@@ -292,9 +291,8 @@ class Andons extends Controller
                         'start' => $now,
                     ]);
     
-                    \Log::info("Timer created for item ID: " . $item->id);
                 } else {
-                    \Log::info("Timer already exists for item ID: " . $item->id);
+                  
                 }
     
                 $models = AndonTimer::where(['andon_log_id' => $item->id])->first();
