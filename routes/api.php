@@ -24,7 +24,7 @@ Route::prefix('manufacture')->group(function () {
         Route::post('layout-trigger',[Andons::class, '_get_layout_data_trigger']);
         Route::post('create',[Andons::class, '_create_alarm']);
         Route::post('start-repair',[Andons::class, '_create_making_repair']);
-        Route::post('start-repair-automatic',[Andons::class, '_create_making_repair_automatic']);
+        Route::get('start-repair-automatic',[Andons::class, '_create_making_repair_automatic']);
         Route::post('reports',[Andons::class, '_get_reports_']);
         Route::post('reports-excel',[Andons::class, '_get_reports_excel_']);
     });
