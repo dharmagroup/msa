@@ -300,21 +300,21 @@ class Andons extends Controller
                 $model = AndonTimer::where(['andon_log_id' => $item->id])->first();
                 if ($model) {
                     $event = new Event();
-                    $event->send([
+                    $event->sending('andonstartrepair',[
                         'id' => $model->andon_log_id,
                         's' => $model->start ? $model->start->format('Y-m-d H:i:s') : null,
                         'e' => $model->end ? $model->end->format('Y-m-d H:i:s') : null,
-                    ], 'andonstartrepair');
+                    ], );
                     return $model;
                 }
             }
         }
         $event = new Event();
-        $event->send([
+        $event->sending('andonstartrepair',[
             'id' => 1,
             's' => 'test',
             'e' => 'test',
-        ], 'andonstartrepair');
+        ], );
         return "ok"; // Jika tidak ada eksekusi
     }
 
