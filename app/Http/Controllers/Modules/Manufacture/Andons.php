@@ -267,6 +267,52 @@ class Andons extends Controller
         return Response()->json(['message' => 'NOT OK'], 401, [], JSON_PRETTY_PRINT);
     }
 
+    public function _create_making_repair_automatic(Request $request)
+    {
+        $event = new Event();
+        $andonLog = AndonLog::where(['status' => 'active'])->get();
+
+        foreach ($andonLog as $item) {
+            // Mendapatkan waktu sekarang dan waktu created_at
+            $now = Carbon::now('Asia/Jakarta');
+            $createdAt = Carbon::parse($item->created_at, 'Asia/Jakarta');
+
+            // Mengecek apakah sudah lebih dari 2 menit sejak created_at
+            if ($now->diffInMinutes($createdAt) >= 2) {
+                $model = AndonTimer::where(['andon_log_id' => $item->id]);
+
+                if (!$model->exists()) {
+                    // Membuat timer baru
+                    $andonTimer = AndonTimer::create([
+                        'andon_log_id' => $item->id,
+                        'start' => $now,
+                    ]);
+                } else {
+                    // Menghapus timer yang ada dan membuat yang baru
+                    $model->delete();
+                    $andonTimer = AndonTimer::create([
+                        'andon_log_id' => $item->id,
+                        'start' => $now,
+                    ]);
+                }
+
+                // Mengambil timer terbaru
+                $model = AndonTimer::where(['andon_log_id' => $item->id])->first();
+                if ($model) {
+                    $event->send([
+                        'id' => $model->andon_log_id,
+                        's' => $model->start ? $model->start->format('Y-m-d H:i:s') : null,
+                        'e' => $model->end ? $model->end->format('Y-m-d H:i:s') : null,
+                    ], 'andonstartrepair');
+                    return true;
+                }
+            }
+        }
+
+        return false; // Jika tidak ada eksekusi
+    }
+
+
     public function _get_reports_(Request $request)
     {
         $token = $request->header('token');
@@ -336,7 +382,7 @@ class Andons extends Controller
             \DB::raw('andon_timers.start as "START REPAIR"'),
             \DB::raw('andon_timers.end as "END REPAIR"'),
             \DB::raw('andon_logs.created_at as "CREATED AT"'),
-           
+
         )
             ->join('andon_types', 'andon_types.id', '=', 'andon_logs.andon_type')
             ->leftJoin('andon_timers', 'andon_timers.andon_log_id', '=', 'andon_logs.id');
