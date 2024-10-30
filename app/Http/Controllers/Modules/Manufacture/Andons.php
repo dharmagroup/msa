@@ -293,11 +293,12 @@ class Andons extends Controller
                 $models = AndonTimer::where(['andon_log_id' => $item->id])->first();
                 if ($models) {
                     $event = new Event();
-                    $event->sending('andonstartrepair',[
+                    $event->sending('andonstartrepair', [
                         'id' => $models->andon_log_id,
-                        's' => $models->start ? $models->start->format('Y-m-d H:i:s') : null,
-                        'e' => $models->end ? $models->end->format('Y-m-d H:i:s') : null,
-                    ], );
+                        's' => $models->start ? Carbon::parse($models->start)->format('Y-m-d H:i:s') : null,
+                        'e' => $models->end ? Carbon::parse($models->end)->format('Y-m-d H:i:s') : null,
+                    ]);
+                
                     return $models;
                 }
             // }
