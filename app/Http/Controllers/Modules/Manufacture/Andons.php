@@ -295,8 +295,8 @@ class Andons extends Controller
                     $event = new Event();
                     $event->sending('andonstartrepair',[
                         'id' => $models->andon_log_id,
-                        's' => $models->start ? $model->start->format('Y-m-d H:i:s') : null,
-                        'e' => $models->end ? $model->end->format('Y-m-d H:i:s') : null,
+                        's' => $models->start ? $models->start->format('Y-m-d H:i:s') : null,
+                        'e' => $models->end ? $models->end->format('Y-m-d H:i:s') : null,
                     ], );
                     return $models;
                 }
