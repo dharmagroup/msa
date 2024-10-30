@@ -269,7 +269,7 @@ class Andons extends Controller
 
     public function _create_making_repair_automatic(Request $request)
     {
-        $event = new Event();
+       
         $andonLog = AndonLog::where(['status' => 'active'])->get();
 
         foreach ($andonLog as $item) {
@@ -299,6 +299,7 @@ class Andons extends Controller
                 // Mengambil timer terbaru
                 $model = AndonTimer::where(['andon_log_id' => $item->id])->first();
                 if ($model) {
+                    $event = new Event();
                     $event->send([
                         'id' => $model->andon_log_id,
                         's' => $model->start ? $model->start->format('Y-m-d H:i:s') : null,
@@ -308,6 +309,7 @@ class Andons extends Controller
                 }
             }
         }
+        $event = new Event();
         $event->send([
             'id' => 1,
             's' => 'test',
