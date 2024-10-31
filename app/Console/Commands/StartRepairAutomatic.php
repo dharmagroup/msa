@@ -14,6 +14,7 @@ class StartRepairAutomatic extends Command
     public function handle()
     {
         $andons = new Andons();
-        return $andons->_create_making_repair_automatic();
+        $andons->_create_making_repair_automatic();
+        $this->info('Tugas berhasil dijalankan!');
     }
 }
