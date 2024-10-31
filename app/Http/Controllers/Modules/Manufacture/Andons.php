@@ -277,7 +277,7 @@ class Andons extends Controller
             $createdAt = Carbon::parse($item->created_at, 'Asia/Jakarta');
 
 
-            \Log::info("Time difference: " . $createdAt->diffInSeconds($now));
+            // \Log::info("Time difference: " . $createdAt->diffInSeconds($now));
 
             if ($createdAt->diffInSeconds($now) >= 120) {
                 // Cek apakah timer sudah ada
